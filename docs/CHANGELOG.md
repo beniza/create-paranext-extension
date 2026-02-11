@@ -19,6 +19,11 @@ This release addresses all identified issues and implements best practices from 
 - **Extension Template Choice**: Interactive selection between basic and multi-extension templates
 - **Improved Help Text**: Comprehensive --help with examples and feature descriptions
 - **Comprehensive FAQ**: Added FAQ section to README addressing common questions
+- **Test Suite**: Comprehensive automated testing with 99 tests covering:
+  - 27 unit tests (name conversion, version detection, file operations)
+  - 11 integration tests (end-to-end workflows, git operations)
+  - 28 error handling tests (prerequisites, invalid input, recovery)
+  - 33 validation tests (input formats, output correctness)
 
 ### Changed
 

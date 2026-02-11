@@ -9,6 +9,34 @@ The `create-extension.sh` script automates the entire process of creating a new 
 - ✅ **Complete Automation:** Handles prerequisite checking, paranext-core setup, and extension creation
 - ✅ **Smart Dependencies:** Installs and builds paranext-core if needed
 - ✅ **Version Safety:** Ensures you're developing against stable APIs, not unstable `main` branch
+- ✅ **Comprehensive Testing:** 99 automated tests covering all functionality
+
+## Testing
+
+The tool includes a comprehensive test suite. To run tests:
+
+```bash
+# Run all tests (99 tests total)
+./tests/test-runner.sh
+
+# Run specific test suite
+./tests/test-runner.sh --suite unit           # 27 tests
+./tests/test-runner.sh --suite integration   # 11 tests
+./tests/test-runner.sh --suite error-handling # 28 tests
+./tests/test-runner.sh --suite validation    # 33 tests
+
+# Verbose output with detailed test information
+./tests/test-runner.sh --verbose
+
+# List all tests without running them
+./tests/test-runner.sh --dry-run
+```
+
+See [tests/README.md](../tests/README.md) for complete test documentation including:
+- Test categories and descriptions
+- Individual test listings
+- Test output formats
+- Adding new tests
 
 ## Quick Start
 

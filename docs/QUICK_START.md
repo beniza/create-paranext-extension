@@ -45,6 +45,23 @@ Answer the prompts:
 ./create-paranext-extension.sh -n "Quick Test" --skip-test
 ```
 
+## Testing the Tool
+
+The project includes a comprehensive test suite:
+
+```bash
+# Run all tests (99 tests)
+./tests/test-runner.sh
+
+# Run specific test category
+./tests/test-runner.sh --suite unit           # 27 tests
+./tests/test-runner.sh --suite integration   # 11 tests
+./tests/test-runner.sh --suite error-handling # 28 tests
+./tests/test-runner.sh --suite validation    # 33 tests
+```
+
+See [tests/README.md](../tests/README.md) for detailed test documentation.
+
 ## After Creation
 
 ```bash

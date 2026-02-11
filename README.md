@@ -43,6 +43,9 @@ For detailed usage instructions, see [Quick Start Guide](docs/QUICK_START.md).
 - **[Design Rationale](docs/CPE-DESIGN-RATIONALE.md)** - Why CPE exists and how it addresses the 30-step setup challenge
 - **[Changelog](docs/CHANGELOG.md)** - Version history and changes
 
+### Testing & Quality
+- **[Test Suite](tests/README.md)** - Comprehensive test suite (99 tests covering unit, integration, error handling, and validation)
+
 ### Reference Guides
 - **[Manual Extension Setup](docs/paranext-extension-creation-prompt.md)** - Step-by-step manual process (for reference)
 - **[Workspace Setup Guide](docs/workspace-setup-guide.md)** - Platform.Bible development environment setup
@@ -123,15 +126,23 @@ See [Usage Guide](docs/script-usage-guide.md) for all options.
 create-paranext-extension/
 ├── create-paranext-extension.sh   # Main automation script
 ├── README.md                       # This file (repository overview)
-└── docs/
-    ├── QUICK_START.md              # Fast getting-started guide
-    ├── CPE-SPEC.md                 # Complete specification
-    ├── CPE-DESIGN-RATIONALE.md     # Why CPE exists
-    ├── CHANGELOG.md                # Version history
-    ├── UPDATE_SUMMARY.md           # v2.0 detailed changes
-    ├── script-usage-guide.md       # Detailed usage instructions
-    ├── workspace-setup-guide.md    # Environment setup
-    └── paranext-extension-creation-prompt.md  # Manual process reference
+├── docs/
+│   ├── QUICK_START.md              # Fast getting-started guide
+│   ├── CPE-SPEC.md                 # Complete specification
+│   ├── CPE-DESIGN-RATIONALE.md     # Why CPE exists
+│   ├── CHANGELOG.md                # Version history
+│   ├── UPDATE_SUMMARY.md           # v2.0 detailed changes
+│   ├── script-usage-guide.md       # Detailed usage instructions
+│   ├── workspace-setup-guide.md    # Environment setup
+│   └── paranext-extension-creation-prompt.md  # Manual process reference
+└── tests/
+    ├── test-runner.sh              # Main test orchestrator (99 tests)
+    ├── test-helpers.sh             # Common test utilities
+    ├── test-unit.sh                # Unit tests
+    ├── test-integration.sh         # Integration tests
+    ├── test-error-handling.sh      # Error handling tests
+    ├── test-validation.sh          # Validation tests
+    └── README.md                   # Test documentation
 ```
 
 ---
@@ -162,6 +173,28 @@ See [Changelog](docs/CHANGELOG.md) for complete history.
 
 ---
 
+## � Testing
+
+The project includes a comprehensive test suite with 99 tests:
+
+```bash
+# Run all tests
+./tests/test-runner.sh
+
+# Run specific test suite
+./tests/test-runner.sh --suite unit
+./tests/test-runner.sh --suite integration
+./tests/test-runner.sh --suite error-handling
+./tests/test-runner.sh --suite validation
+
+# Verbose output
+./tests/test-runner.sh --verbose
+```
+
+See [Test Suite Documentation](tests/README.md) for detailed information.
+
+---
+
 ## 🤝 Contributing
 
 Contributions welcome! Areas of interest:
@@ -169,6 +202,7 @@ Contributions welcome! Areas of interest:
 - Documentation improvements
 - Multi-language implementations (Python, Node.js)
 - Additional templates and customizations
+- Test coverage improvements
 
 See [CPE Specification](docs/CPE-SPEC.md) for implementation guidance.
 
