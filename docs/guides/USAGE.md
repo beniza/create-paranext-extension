@@ -9,6 +9,7 @@ The `create-extension.sh` script automates the entire process of creating a new 
 - ✅ **Complete Automation:** Handles prerequisite checking, paranext-core setup, and extension creation
 - ✅ **Smart Dependencies:** Installs and builds paranext-core if needed
 - ✅ **Version Safety:** Ensures you're developing against stable APIs, not unstable `main` branch
+- ✅ **Git Best Practices:** Keeps template history and configures remotes for easy future updates
 - ✅ **Comprehensive Testing:** 92 automated tests covering all functionality
 
 ## Testing
@@ -104,7 +105,7 @@ The script will prompt you for all required information:
 | `-v, --version` | Platform.Bible version | `--version v0.5.0` |
 | `-t, --template` | Template type: basic or multi | `--template multi` |
 | `--skip-deps` | Skip npm install | `--skip-deps` |
-| `--skip-git` | Skip git initialization | `--skip-git` |
+| `--skip-git` | Skip git remote setup | `--skip-git` |
 | `--skip-test` | Skip build test | `--skip-test` |
 | `--verbose` | Show debug output | `--verbose` |
 
@@ -132,7 +133,9 @@ The script will prompt you for all required information:
 ### 4. **Template Setup**
 - 📂 Clones the official extension template
 - 🗂️ Creates a new directory with your extension name
-- 🔄 Removes template's git history and initializes fresh repo
+- 🔄 Keeps git history and sets up remotes:
+  - Renames `origin` → `template` (for future updates)
+  - Creates new `origin` remote (placeholder for your repo)
 
 ### 5. **File Operations**
 - 📄 Renames `paranext-extension-template.d.ts` → `your-extension-name.d.ts`
@@ -160,6 +163,21 @@ The script will prompt you for all required information:
 - 📋 Documents target version in commit message
 - ⚠️ Avoids unstable `main` branch development
 - 🔒 Ensures API compatibility with released version
+
+### 9. **Git Remote Configuration**
+- 🔄 Renames template's `origin` remote to `template`
+- 📌 Creates new `origin` remote (placeholder: `YOUR_REPO_URL_HERE`)
+- 📜 Preserves git history for traceability
+- 🔄 Enables easy template updates in the future:
+  ```bash
+  # Update your extension with latest template changes
+  git fetch template
+  git merge template/main --allow-unrelated-histories
+  ```
+- 💡 Remember to update `origin` URL when you create your repo:
+  ```bash
+  git remote set-url origin https://github.com/yourname/your-extension.git
+  ```
 
 ## Example Usage Scenarios
 
