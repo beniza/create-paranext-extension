@@ -20,27 +20,27 @@ EXTENSION_TEMPLATE_TYPE="basic"  # basic or multi
 
 # Print colored output
 print_info() {
-    echo -e "${BLUE}ℹ️  $1${NC}"
+    echo -e "${BLUE}ℹ️  $1${NC}" >&2
 }
 
 print_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    echo -e "${GREEN}✅ $1${NC}" >&2
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
+    echo -e "${YELLOW}⚠️  $1${NC}" >&2
 }
 
 print_error() {
-    echo -e "${RED}❌ $1${NC}"
+    echo -e "${RED}❌ $1${NC}" >&2
 }
 
 print_header() {
-    echo -e "${BLUE}"
-    echo "=================================================="
-    echo "  🚀 Paranext Extension Creator"
-    echo "=================================================="
-    echo -e "${NC}"
+    echo -e "${BLUE}" >&2
+    echo "==================================================" >&2
+    echo "  🚀 Paranext Extension Creator" >&2
+    echo "==================================================" >&2
+    echo -e "${NC}" >&2
 }
 
 # Function to convert string to different cases
@@ -186,11 +186,26 @@ setup_paranext_core() {
     
     if [ "$current_tag" != "$target_version" ] && [ "$current_branch" != "$target_version" ]; then
         print_info "Switching to $target_version..."
-        git checkout "$target_version" --quiet 2>/dev/null || {
+        
+        # First check if the target version exists
+        if ! git rev-parse "$target_version" >/dev/null 2>&1; then
             print_error "Version $target_version not found. Available versions:"
             git tag -l "v*" | sort -V | tail -n 10
             exit 1
-        }
+        fi
+        
+        # Check for local changes that might prevent checkout
+        if ! git diff-index --quiet HEAD -- 2>/dev/null; then
+            print_warning "Local changes detected. Stashing them..."
+            git stash --quiet
+        fi
+        
+        # Try to checkout
+        if ! git checkout "$target_version" --quiet 2>&1; then
+            print_error "Failed to checkout $target_version. Please check git status and try again."
+            exit 1
+        fi
+        
         print_success "Switched to $target_version!"
     else
         print_success "Already on $target_version!"
