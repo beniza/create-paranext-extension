@@ -31,4 +31,8 @@ tmp/
 test-*
 example-*
 demo-*
+
+# Test output and logs
+tests/output/
+tests/test-logs/
 EOF
