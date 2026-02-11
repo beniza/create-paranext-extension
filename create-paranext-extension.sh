@@ -633,6 +633,24 @@ install_dependencies() {
     npm install --silent
     
     print_success "Dependencies installed successfully!"
+    
+    # Check if browserslist-db update is needed (only in interactive mode)
+    if [ "$INTERACTIVE_MODE" = true ]; then
+        echo
+        print_info "📋 Optional: Update browserslist database"
+        print_info "This updates browser compatibility data used by build tools."
+        print_info "Safe to skip - you may see a harmless warning if you don't update."
+        echo
+        read -p "Would you like to update browserslist-db now? (y/N): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            print_info "Updating browserslist database..."
+            npx update-browserslist-db@latest 2>/dev/null || print_warning "Update skipped or failed (not critical)"
+            print_success "Browserslist database updated!"
+        else
+            print_info "Skipped. You can update later with: npx update-browserslist-db@latest"
+        fi
+    fi
 }
 
 # Function to create initial git commit
@@ -806,11 +824,17 @@ done
 main() {
     print_header
     
+    # Determine if we're in interactive mode (no extension name provided via command line)
+    INTERACTIVE_MODE=false
+    if [ -z "$EXTENSION_NAME" ]; then
+        INTERACTIVE_MODE=true
+    fi
+    
     # Check prerequisites
     check_prerequisites
     
     # Get user input (skip if provided via command line)
-    if [ -z "$EXTENSION_NAME" ]; then
+    if [ "$INTERACTIVE_MODE" = true ]; then
         get_user_input
     else
         # Generate case variations from provided name

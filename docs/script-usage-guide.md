@@ -145,6 +145,7 @@ The script will prompt you for all required information:
 - 📦 Removes old `package-lock.json`
 - 🔄 Runs `npm install` to generate new lock file
 - ✅ Installs all required dependencies
+- 💬 Prompts to update browserslist-db (interactive mode only, optional)
 
 ### 7. **Quality Assurance**
 - 🏗️ Tests that the extension builds successfully
@@ -262,6 +263,12 @@ curl https://get.volta.sh | bash
 # Or update Node.js directly
 # Visit nodejs.org for latest version
 ```
+
+**"Browserslist: caniuse-lite is outdated" warning**
+This is a harmless warning about browser compatibility data. You can:
+- Accept the update prompt during setup (interactive mode only)
+- Update manually later: `npx update-browserslist-db@latest`
+- Ignore it - it won't affect extension functionality
 
 ### Debug Mode
 

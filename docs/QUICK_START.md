@@ -147,6 +147,14 @@ npm run build
 3. 💡 Target latest version unless you have a specific reason not to
 4. 💡 If you update paranext-core, rebuild your extension
 
+## Common Questions
+
+**Q: What's the browserslist-db prompt during installation?**  
+A: This updates browser compatibility data. It's optional and safe to skip. You'll see a harmless warning if you don't update. Update later with: `npx update-browserslist-db@latest`
+
+**Q: Should I update browserslist-db?**  
+A: Only if you see warnings and want to silence them. It won't affect functionality.
+
 ## Need More Help?
 
 - Check the [FAQ in README.md](README.md#faq)
