@@ -13,10 +13,10 @@ This workspace contains tools and examples for Platform.Bible extension developm
 
 ```bash
 # Interactive mode (recommended for beginners)
-./create-extension.sh
+./create-paranext-extension.sh
 
 # Command line mode
-./create-extension.sh --name "My Extension" --author "Your Name"
+./create-paranext-extension.sh --name "My Extension" --author "Your Name"
 ```
 
 ### 2. Development Workflow
@@ -32,7 +32,7 @@ npm run watch  # Just builds and watches for changes
 ## What's in This Workspace
 
 ### 🤖 Automation Tools
-- **`create-extension.sh`** - Automated extension creation script
+- **`create-paranext-extension.sh`** - Automated extension creation script
   - ✅ Sets up Platform.Bible core v0.4.0 automatically
   - ✅ Creates extension from official template
   - ✅ Handles all file renaming and updates
@@ -65,7 +65,7 @@ npm run watch  # Just builds and watches for changes
 - **User Compatibility**: Extensions work with released Platform.Bible
 
 ### Complete Automation 🚀
-- **One Command Setup**: `./create-extension.sh --name "My Extension"`
+- **One Command Setup**: `./create-paranext-extension.sh --name "My Extension"`
 - **Smart Detection**: Checks versions and dependencies
 - **Zero Manual Steps**: Ready for development immediately
 
@@ -99,7 +99,7 @@ dotnet --version # Should be 8.0+
 
 ### Bible Study Extension
 ```bash
-./create-extension.sh \
+./create-paranext-extension.sh \
   --name "Advanced Bible Study Tools" \
   --author "Bible Study Team" \
   --publisher "faithTech" \
@@ -108,7 +108,7 @@ dotnet --version # Should be 8.0+
 
 ### Translation Helper
 ```bash
-./create-extension.sh \
+./create-paranext-extension.sh \
   --name "Translation Assistant" \
   --author "Translation Team" \
   --publisher "translationOrg" \
@@ -117,7 +117,7 @@ dotnet --version # Should be 8.0+
 
 ### Scripture Memory Tool
 ```bash
-./create-extension.sh \
+./create-paranext-extension.sh \
   --name "Scripture Memory Helper" \
   --author "Memory Team" \
   --publisher "memoryTools" \
@@ -148,7 +148,7 @@ npm start  # Automatically builds extension and launches Platform.Bible
 ### Common Issues
 
 1. **"paranext-core not found"**
-   - Solution: Run `./create-extension.sh` - it will set up paranext-core automatically
+   - Solution: Run `./create-paranext-extension.sh` - it will set up paranext-core automatically
 
 2. **"Wrong Node.js version"**
    - Solution: Install Volta (`curl https://get.volta.sh | bash`) and restart terminal

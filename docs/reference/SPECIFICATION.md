@@ -41,7 +41,7 @@ Automate the complete setup of a Platform.Bible extension development environmen
 - Create extension project from official templates
 - Set up Platform.Bible core at specified version
 - Configure development environment
-- Initialize git repository with proper remotes
+- Configure git remotes for template and user repository
 - Install dependencies and verify build
 
 ---
@@ -268,12 +268,12 @@ cli_arguments:
     - name: skip-git
       long: --skip-git
       type: boolean
-      description: Skip git initialization
+      description: Skip git remote setup
       default: false
       guidance: |
-        Skip git setup when:
-        - Extension already has git initialized
-        - You'll set up version control manually
+        Skip git remote configuration when:
+        - Extension already has git remotes configured
+        - You'll set up remotes manually
         - Testing/development scenarios
         Note: You'll miss automatic template remote setup for future updates
     
@@ -407,7 +407,7 @@ workflow:
       error_recovery: warn_but_continue
     
     - id: git_commit
-      name: Git Initialization
+      name: Initial Git Commit
       condition: not_skip_git
       operations:
         - stage_all_files

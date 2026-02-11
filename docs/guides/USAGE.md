@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `create-extension.sh` script automates the entire process of creating a new Paranext extension from the template. It handles all the tedious file renaming, content updating, and initial setup steps.
+The `create-paranext-extension.sh` script automates the entire process of creating a new Paranext extension from the template. It handles all the tedious file renaming, content updating, and initial setup steps.
 
 **Key Features:**
 - ✅ **Version Targeting:** Automatically sets up Platform.Bible core v0.4.0 (stable release)
@@ -43,16 +43,16 @@ See [tests/README.md](../tests/README.md) for complete test documentation includ
 
 ### 1. Make the script executable (one time only)
 ```bash
-chmod +x create-extension.sh
+chmod +x create-paranext-extension.sh
 ```
 
 ### 2. Run the script
 ```bash
 # Interactive mode (recommended for beginners)
-./create-extension.sh
+./create-paranext-extension.sh
 
 # Or from any directory (using absolute path)
-bash /home/ben/Documents/dev/ptx/create-extension.sh
+bash /home/ben/Documents/dev/ptx/create-paranext-extension.sh
 ```
 
 **What happens automatically:**
@@ -67,7 +67,7 @@ bash /home/ben/Documents/dev/ptx/create-extension.sh
 
 ### Interactive Mode (Recommended)
 ```bash
-./create-extension.sh
+./create-paranext-extension.sh
 ```
 The script will prompt you for all required information:
 - Extension name
@@ -78,7 +78,7 @@ The script will prompt you for all required information:
 
 ### Command Line Mode
 ```bash
-./create-extension.sh \
+./create-paranext-extension.sh \
   --name "Scripture Memory Helper" \
   --author "John Doe" \
   --publisher "myPublisher" \
@@ -89,7 +89,7 @@ The script will prompt you for all required information:
 ### Semi-Automated Mode
 ```bash
 # Provide some info, script will ask for the rest
-./create-extension.sh --name "My Extension" --author "Your Name"
+./create-paranext-extension.sh --name "My Extension" --author "Your Name"
 ```
 
 ## Command Line Options
@@ -183,7 +183,7 @@ The script will prompt you for all required information:
 
 ### Creating a Bible Study Extension
 ```bash
-./create-extension.sh \
+./create-paranext-extension.sh \
   --name "Advanced Bible Study Tools" \
   --author "Bible Study Team" \
   --publisher "faithTech" \
@@ -202,7 +202,7 @@ The script will prompt you for all required information:
 
 ### Creating a Translation Helper
 ```bash
-./create-extension.sh \
+./create-paranext-extension.sh \
   --name "Translation Assistant" \
   --author "SIL International" \
   --description "Assists translators with contextual suggestions"
@@ -211,7 +211,7 @@ The script will prompt you for all required information:
 ### Quick Development Setup
 ```bash
 # For rapid prototyping, skip time-consuming steps
-./create-extension.sh \
+./create-paranext-extension.sh \
   --name "Quick Prototype" \
   --skip-deps \
   --skip-test
@@ -265,16 +265,16 @@ cd /c/Users/YourName/Documents/dev/ptx-extension/create-paranext-extension
 ```bash
 # Make sure you're running from the correct directory
 cd /home/ben/Documents/dev/ptx
-./create-extension.sh
+./create-paranext-extension.sh
 
 # Or use absolute path
-bash /home/ben/Documents/dev/ptx/create-extension.sh
+bash /home/ben/Documents/dev/ptx/create-paranext-extension.sh
 ```
 
 **"Permission denied"**
 ```bash
 # Make the script executable
-chmod +x create-extension.sh
+chmod +x create-paranext-extension.sh
 ```
 
 **"Directory already exists"**
@@ -339,7 +339,7 @@ This shows every shell command executed, in addition to the script's verbose out
 ### Using in CI/CD Pipelines
 ```bash
 # Non-interactive mode for automation
-./create-extension.sh 
+./create-paranext-extension.sh 
   --name "$EXTENSION_NAME" 
   --author "$AUTHOR" 
   --publisher "$PUBLISHER" 
@@ -353,32 +353,15 @@ This shows every shell command executed, in addition to the script's verbose out
 # Create multiple extensions
 extensions=("Bible Search" "Verse Highlighter" "Study Notes")
 for ext in "${extensions[@]}"; do
-  ./create-extension.sh --name "$ext" --author "Dev Team"
+  ./create-paranext-extension.sh --name "$ext" --author "Dev Team"
 done
 ```
 
 ### Custom Workspace Structure
 ```bash
 # Create in specific directory structure
-./create-extension.sh 
+./create-paranext-extension.sh 
   --name "Team Extension" 
-  --workspace ~/projects/platform-bible/extensions
-```
-
-### Batch Creation
-```bash
-# Create multiple extensions
-extensions=("Bible Search" "Verse Highlighter" "Study Notes")
-for ext in "${extensions[@]}"; do
-  ./scripts/create-extension.sh --name "$ext" --author "Dev Team"
-done
-```
-
-### Custom Workspace Structure
-```bash
-# Create in specific directory structure
-./scripts/create-extension.sh \
-  --name "Team Extension" \
   --workspace ~/projects/platform-bible/extensions
 ```
 
@@ -393,7 +376,7 @@ Add to your VS Code tasks.json:
     {
       "label": "Create New Extension",
       "type": "shell",
-      "command": "${workspaceFolder}/create-extension.sh",
+      "command": "${workspaceFolder}/create-paranext-extension.sh",
       "group": "build",
       "presentation": {
         "echo": true,
