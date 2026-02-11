@@ -11,7 +11,7 @@ Reduces extension setup from ~30 manual steps to a single command, handling ever
 | Component | Description |
 |-----------|-------------|
 | **Tool** | [create-paranext-extension.sh](create-paranext-extension.sh) |
-| **Version** | 2.0.0 |
+| **Version** | 2.1.0 |
 | **Status** | Under evaluation - testing in progress |
 | **Created** | With assistance from Claude Sonnet 4.5 |
 | **Platform** | Platform.Bible Extension Development |
@@ -44,7 +44,7 @@ For detailed usage instructions, see [Quick Start Guide](docs/QUICK_START.md).
 - **[Changelog](docs/CHANGELOG.md)** - Version history and changes
 
 ### Testing & Quality
-- **[Test Suite](tests/README.md)** - Comprehensive test suite (99 tests covering unit, integration, error handling, and validation)
+- **[Test Suite](tests/README.md)** - Comprehensive test suite (92 tests covering unit, integration, error handling, and validation)
 
 ### Reference Guides
 - **[Manual Extension Setup](docs/paranext-extension-creation-prompt.md)** - Step-by-step manual process (for reference)
@@ -62,7 +62,7 @@ For detailed usage instructions, see [Quick Start Guide](docs/QUICK_START.md).
 | **Safety Checks** | Warns about existing extensions before updating paranext-core |
 | **Smart Management** | Reuses existing paranext-core instead of re-cloning |
 | **Best Practices** | Follows Paranext team recommendations (keeps git history, sets up template remote) |
-| **Full Automation** | Handles naming, file updates, dependencies, symlinking, and build verification |
+| **Full Automation** | Handles naming, file updates, dependencies, and build verification |
 
 ---
 
@@ -73,7 +73,7 @@ A complete, ready-to-develop extension with:
 - Tailwind CSS styling
 - Proper project structure
 - Git workflow configured for template updates
-- Built and symlinked to Platform.Bible
+- Ready to launch with Platform.Bible (via `npm start`)
 - Welcome screen with next steps
 
 See [Output Specification](docs/CPE-SPEC.md#output-specification) for complete details.
@@ -143,7 +143,7 @@ create-paranext-extension/
 │   ├── workspace-setup-guide.md    # Environment setup
 │   └── paranext-extension-creation-prompt.md  # Manual process reference
 └── tests/
-    ├── test-runner.sh              # Main test orchestrator (99 tests)
+    ├── test-runner.sh              # Main test orchestrator (92 tests)
     ├── test-helpers.sh             # Common test utilities
     ├── test-unit.sh                # Unit tests
     ├── test-integration.sh         # Integration tests
@@ -167,7 +167,7 @@ See [Design Philosophy](docs/CPE-SPEC.md#design-philosophy) for details.
 
 ## 🔄 Version Information
 
-**Current Version:** 2.0.0 (February 2026)
+**Current Version:** 2.1.0 (February 2026)
 
 Major improvements in v2.0:
 - Dynamic version detection via GitHub API

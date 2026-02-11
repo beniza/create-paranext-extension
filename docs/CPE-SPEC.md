@@ -1,8 +1,8 @@
 # Create Paranext Extension (CPE) - Specification
 
-**Version:** 2.0.0  
+**Version:** 2.1.0  
 **Last Updated:** February 11, 2026  
-**Status:** Under review  
+**Status:** Under review - Needs update to remove symlink operations  
 **Purpose:** Single Source of Truth for CPE Tool  
 **Disclaimer:** Created with the help of Claude Sonnet 4.5  
 **Implementations:** Shell Script (primary), Python, Node.js (future)

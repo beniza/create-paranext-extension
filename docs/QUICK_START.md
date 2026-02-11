@@ -1,4 +1,4 @@
-# Quick Start Guide - create-paranext-extension v2.0
+# Quick Start Guide - create-paranext-extension v2.1
 
 ## TL;DR
 

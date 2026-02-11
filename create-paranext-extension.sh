@@ -3,12 +3,12 @@
 # Paranext Extension Creator Script
 # Automates the creation of a new Paranext extension from the template
 # Author: Platform.Bible Developer Community
-# Version: 2.0
+# Version: 2.1
 
 set -e  # Exit on any error
 
 # Script version
-SCRIPT_VERSION="2.0"
+SCRIPT_VERSION="2.1"
 
 # Colors for output
 RED='\033[0;31m'
@@ -802,7 +802,7 @@ show_completion() {
 
 # Function to show help
 show_help() {
-    echo "Paranext Extension Creator Script v2.0"
+    echo "Paranext Extension Creator Script v2.1"
     echo
     echo "Usage: $0 [OPTIONS]"
     echo
