@@ -2,7 +2,7 @@
 
 **Version:** 2.1.0  
 **Last Updated:** February 11, 2026  
-**Status:** Under review - Needs update to remove symlink operations  
+**Status:** Current  
 **Purpose:** Single Source of Truth for CPE Tool  
 **Disclaimer:** Created with the help of Claude Sonnet 4.5  
 **Implementations:** Shell Script (primary), Python, Node.js (future)
@@ -634,33 +634,9 @@ operations:
       - file_not_found: warn, skip file
       - permission_denied: error, exit
       - encoding_error: warn, skip file
-  
-  # Symlink Creation
-  - id: create_extension_symlink
-    name: Create Extension Symlink
-    description: Link extension dist to paranext-core extensions folder
-    inputs:
-      - name: workspace_dir
-        type: path
-      - name: extension_name
-        type: string
-    outputs:
-      - name: symlink_created
-        type: boolean
-    behavior:
-      - source: workspace_dir/extension_name/dist
-      - target: workspace_dir/paranext-core/extensions/dist/extension_name
-      - verify target directory exists
-      - remove existing symlink if exists
-      - create symlink
-    error_handling:
-      - target_not_found: error, provide build instructions
-      - permission_denied: error, show manual instructions
-      - symlink_exists_not_link: error, prompt for removal
-    notes:
-      - source may not exist yet (created on build)
-      - provide clear message about building extension
 ```
+
+**Note:** Extension loading is handled by Platform.Bible's `--extensions` CLI argument. The `npm start` script in the extension template automatically passes `--extensions ${workspaceFolder}/dist` to Platform.Bible, eliminating the need for symlinks.
 
 ### User Interaction Patterns
 
@@ -807,17 +783,6 @@ error_handling:
         ⚠️  Build failed: {error_details}
         You may need to manually fix this later.
         See build output above for details.
-    
-    - name: Symlink Failure
-      severity: low
-      action: warn_with_manual_steps
-      examples:
-        - permission denied
-        - target directory missing
-      message_template: |
-        ⚠️  Could not create symlink automatically.
-        Manual steps:
-        {manual_steps}
 ```
 
 ### Recovery Strategies

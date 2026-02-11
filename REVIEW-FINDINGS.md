@@ -74,46 +74,25 @@
 
 ## Critical Issue: CPE-SPEC.md Needs Manual Review
 
-### ❌ URGENT: Outdated Symlink Documentation
+### ✅ RESOLVED: Symlink Documentation Removed
 
-**Location:** `docs/CPE-SPEC.md` lines 638-659, 811-818
+**Status:** FIXED - All symlink references removed from documentation
 
-**Problem:** The specification document still contains extensive symlink operation documentation:
+**Changes Made:**
 
-```yaml
-# Symlink Creation
-- id: create_extension_symlink
-  name: Create Extension Symlink
-  description: Link extension dist to paranext-core extensions folder
-  inputs:
-    - name: workspace_dir
-    - name: extension_name
-  outputs:
-    - name: symlink_created
-  behavior:
-    - source: workspace_dir/extension_name/dist
-    - target: workspace_dir/paranext-core/extensions/dist/extension_name
-    - verify target directory exists
-    - remove existing symlink if exists
-    - create symlink
-  error_handling:
-    - target_not_found: error, provide build instructions
-    - permission_denied: error, show manual instructions
-    - symlink_exists_not_link: error, prompt for removal
-```
+1. **CPE-SPEC.md** - Removed symlink operation documentation:
+   - Removed lines 638-663: `create_extension_symlink` operation section
+   - Removed lines 811-820: Symlink failure error handling
+   - Added note explaining that extensions load via `--extensions` CLI argument
+   - Updated status from "Under review - Needs update" to "Current"
 
-**Impact:** 
-- Misleads future implementers (Python, Node.js versions)
-- Contradicts actual script behavior
-- Misrepresents how Platform.Bible loads extensions
+2. **tests/README.md** - Removed symlink test references:
+   - Removed "Symlink Structure (2 tests)" from validation tests list
+   - Removed "Symlink tests may require admin privileges" from Windows section
+   - Removed "Symlink tests run normally" from Linux/macOS section
 
-**Action Required:**
-1. Remove entire `create_extension_symlink` operation section
-2. Update workflow to reflect actual process
-3. Document how extensions are actually loaded (via `--extensions` CLI arg, not symlinks)
-4. Update error handling section to remove symlink-related errors
-
-**Status Note Added:** Added warning to CPE-SPEC.md header: "Needs update to remove symlink operations"
+**Architectural Clarification:**
+Extensions are loaded by Platform.Bible using the `--extensions` CLI argument. The extension template's `npm start` script automatically passes `--extensions ${workspaceFolder}/dist` to Platform.Bible, which is why symlinks are not needed.
 
 ---
 

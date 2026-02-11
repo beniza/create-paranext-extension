@@ -99,7 +99,6 @@ Tests input validation and output correctness:
 - **Path Validation** (5 tests): Absolute/relative paths, Windows paths, spaces, normalization
 - **File Content** (3 tests): package.json, manifest.json, tsconfig.json structure
 - **Placeholders** (3 tests): Replacement correctness, no corruption
-- **Symlink Structure** (2 tests): Target correctness, link type
 - **Git Configuration** (3 tests): Valid/invalid URLs, branch names
 - **npm Configuration** (2 tests): Scope format, package names
 - **File Permissions** (2 tests): Executable scripts, readable configs
@@ -236,7 +235,6 @@ run_test "My new test" test_my_new_test && ((TESTS_PASSED++)) || ((TESTS_FAILED+
 
 - **Requires Git Bash** or WSL to run bash scripts
 - Git Bash is included with [Git for Windows](https://git-scm.com/downloads)
-- Symlink tests may require admin privileges or developer mode
 - Path handling uses forward slashes internally
 - Some permission tests are skipped
 
@@ -244,7 +242,6 @@ run_test "My new test" test_my_new_test && ((TESTS_PASSED++)) || ((TESTS_FAILED+
 
 - All tests should run without special permissions
 - Native bash environment
-- Symlink tests run normally
 - Permission tests are more comprehensive
 
 ## Continuous Integration
