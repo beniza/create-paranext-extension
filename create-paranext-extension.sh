@@ -515,7 +515,7 @@ globalThis.webViewComponent = function WelcomeWebView() {
               <strong>Watch for changes:</strong> Run <code className="tw-bg-white tw-px-2 tw-py-1 tw-rounded tw-text-sm">npm run watch</code> for live development
             </li>
             <li className="tw-text-base">
-              <strong>Test your extension:</strong> Use <code className="tw-bg-white tw-px-2 tw-py-1 tw-rounded tw-text-sm">cd ../paranext-core && npm start</code>
+              <strong>Test your extension:</strong> Use <code className="tw-bg-white tw-px-2 tw-py-1 tw-rounded tw-text-sm">npm start</code> to build and launch Platform.Bible
             </li>
           </ol>
         </div>
@@ -718,12 +718,12 @@ show_completion() {
     echo "  2. Update the git remote 'origin' to point to your repository"
     echo "  3. npm run build             # Build the extension (creates dist directory)"
     echo "  4. npm run watch             # Start development mode"
-    echo "  5. cd ../paranext-core && npm start  # Test in Platform.Bible"
+    echo "  5. npm start  # Build and launch Platform.Bible with your extension"
     echo
     echo -e "${BLUE}Development commands:${NC}"
     echo "  📦 npm run build          # Build for development"
     echo "  🔄 npm run watch          # Watch and rebuild on changes"
-    echo "  🚀 cd ../paranext-core && npm start  # Start Platform.Bible with extension"
+    echo "  🚀 npm start  # Build and launch Platform.Bible with your extension"
     echo "  🧹 npm run lint           # Check code quality"
     echo "  ✨ npm run format         # Format code"
     echo "  📋 npm run package        # Create distributable package"

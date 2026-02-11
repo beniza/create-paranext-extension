@@ -917,7 +917,7 @@ output_format:
           2. Update the git remote 'origin' to point to your repository
           3. npm run build
           4. npm run watch
-          5. cd ../paranext-core && npm start
+          5. npm start  # Automatically launches Platform.Bible with extension
     
     - name: update_instructions
       format: |

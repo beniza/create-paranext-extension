@@ -269,19 +269,17 @@ papi.network.getNetworkEvent('[yourExtensionName].eventName').subscribe(handler)
 ### 9. Testing Your Setup
 
 ```bash
-# Ensure Platform.Bible core is built and ready
-cd ../paranext-core
-npm run build
+# When using the extension template, npm start handles everything:
+cd [your-extension-name]
+npm start  # Builds extension, watches for changes, and launches Platform.Bible
 
-# Return to your extension directory
+# Or manually build and run separately:
+cd ../paranext-core
+npm run build  # Ensure Platform.Bible core is built
 cd ../[your-extension-name]
-
-# Build your extension
-npm run build
-
-# Start Platform.Bible with your extension (from paranext-core directory)
+npm run build  # Build your extension
 cd ../paranext-core
-npm start
+npm start  # Launch Platform.Bible
 
 # Verify your extension loads in Platform.Bible
 # Look for log messages like "[Your Extension] is activating!"

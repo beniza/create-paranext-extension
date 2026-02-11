@@ -66,10 +66,11 @@ See [tests/README.md](../tests/README.md) for detailed test documentation.
 
 ```bash
 cd your-extension-name
-npm run watch          # Start development mode
-# In another terminal:
-cd ../paranext-core
-npm start             # Launch Platform.Bible with your extension
+npm start              # Build, watch for changes, and launch Platform.Bible with your extension
+
+# Or if you want to run Platform.Bible separately:
+npm run watch          # Just build and watch for changes
+# Then run Platform.Bible separately
 ```
 
 ## When to Use Which Template?

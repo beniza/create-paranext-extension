@@ -18,10 +18,10 @@ This workspace contains tools and examples for Platform.Bible extension developm
 
 ```bash
 # Start development mode (in extension directory)
-npm run watch
+npm start  # Builds, watches, and launches Platform.Bible with your extension
 
-# Test in Platform.Bible (in another terminal)
-cd ../paranext-core && npm start
+# Or run separately:
+npm run watch  # Just builds and watches for changes
 ```
 
 ## What's in This Workspace
@@ -133,8 +133,7 @@ npm run package        # Create distributable package
 ### Testing with Platform.Bible
 ```bash
 # Start Platform.Bible with your extension
-cd ../paranext-core
-npm start
+npm start  # Automatically builds extension and launches Platform.Bible
 
 # The extension will be automatically loaded
 ```
