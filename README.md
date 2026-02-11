@@ -12,7 +12,7 @@ Reduces extension setup from ~30 manual steps to a single command, handling ever
 |-----------|-------------|
 | **Tool** | [create-paranext-extension.sh](create-paranext-extension.sh) |
 | **Version** | 2.0.0 |
-| **Status** | Production-ready |
+| **Status** | Under evaluation - testing in progress |
 | **Created** | With assistance from Claude Sonnet 4.5 |
 | **Platform** | Platform.Bible Extension Development |
 
