@@ -3,7 +3,7 @@
 # Paranext Extension Creator Script
 # Automates the creation of a new Paranext extension from the template
 # Author: Platform.Bible Developer Community
-# Version: 1.0
+# Version: 2.0
 
 set -e  # Exit on any error
 
@@ -13,6 +13,10 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
+
+# Default paranext-core version (can be overridden)
+PARANEXT_VERSION="latest"
+EXTENSION_TEMPLATE_TYPE="basic"  # basic or multi
 
 # Print colored output
 print_info() {
@@ -54,11 +58,54 @@ to_pascal_case() {
     echo "${camel^}"  # Capitalize first letter
 }
 
+# Function to get latest stable release version from GitHub
+get_latest_paranext_version() {
+    print_info "Fetching latest Platform.Bible release version..."
+    
+    # Try to get the latest release version from GitHub API
+    local latest_version=$(curl -s "https://api.github.com/repos/paranext/paranext-core/releases/latest" | grep '"tag_name"' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
+    
+    if [ -z "$latest_version" ]; then
+        print_warning "Could not fetch latest version. Using v0.5.0 as fallback."
+        echo "v0.5.0"
+    else
+        print_success "Latest stable release: $latest_version"
+        echo "$latest_version"
+    fi
+}
+
+# Function to check if there are existing extensions in the workspace
+check_existing_extensions() {
+    local workspace_dir="$1"
+    local extensions=()
+    
+    # Look for directories with manifest.json (excluding paranext-core itself)
+    while IFS= read -r -d '' manifest; do
+        local dir=$(dirname "$manifest")
+        local dirname=$(basename "$dir")
+        # Skip paranext-core extensions folder
+        if [[ "$dir" != *"paranext-core"* ]]; then
+            extensions+=("$dirname")
+        fi
+    done < <(find "$workspace_dir" -maxdepth 2 -name "manifest.json" -print0 2>/dev/null)
+    
+    if [ ${#extensions[@]} -gt 0 ]; then
+        return 0  # Extensions found
+    else
+        return 1  # No extensions found
+    fi
+}
+
 # Function to validate prerequisites
 check_prerequisites() {
     print_info "Checking prerequisites..."
     
     local missing_deps=()
+    
+    # Check for curl (needed for API calls)
+    if ! command -v curl &> /dev/null; then
+        missing_deps+=("curl")
+    fi
     
     # Check for git
     if ! command -v git &> /dev/null; then
@@ -82,23 +129,6 @@ check_prerequisites() {
         fi
     fi
     
-    # Check for paranext-core
-    if [ ! -d "paranext-core" ]; then
-        print_warning "paranext-core not found in current directory."
-        print_info "The script will help you set up paranext-core targeting v0.4.0 if needed."
-    else
-        # Check if paranext-core is on the correct version
-        if [ -d "paranext-core/.git" ]; then
-            current_branch=$(cd paranext-core && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
-            current_tag=$(cd paranext-core && git describe --exact-match --tags 2>/dev/null || echo "")
-            
-            if [ "$current_tag" != "v0.4.0" ] && [ "$current_branch" != "v0.4.0" ]; then
-                print_warning "paranext-core is not on v0.4.0 (currently on: $current_branch $current_tag)"
-                print_info "Recommended: Switch to v0.4.0 for stable extension development"
-            fi
-        fi
-    fi
-    
     if [ ${#missing_deps[@]} -ne 0 ]; then
         print_error "Missing dependencies: ${missing_deps[*]}"
         print_info "Please install missing dependencies and try again."
@@ -110,31 +140,60 @@ check_prerequisites() {
 
 # Function to setup paranext-core with correct version
 setup_paranext_core() {
-    print_info "Setting up Platform.Bible core (v0.4.0)..."
+    local target_version="$1"
+    print_info "Setting up Platform.Bible core ($target_version)..."
     
     # Convert WORKSPACE_DIR to absolute path to avoid confusion
     WORKSPACE_DIR=$(realpath "$WORKSPACE_DIR")
     cd "$WORKSPACE_DIR"
     
+    # Check for existing extensions before updating paranext-core
+    if [ -d "paranext-core" ]; then
+        if check_existing_extensions "$WORKSPACE_DIR"; then
+            print_warning "⚠️  WARNING: Existing extensions detected in this workspace!"
+            print_warning "Updating paranext-core to $target_version might break existing extensions."
+            echo
+            print_info "You have two options:"
+            echo "  1. Continue and update paranext-core (risk breaking existing extensions)"
+            echo "  2. Abort and create your new extension in a separate directory"
+            echo
+            read -p "Do you want to continue updating paranext-core? (y/N): " -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                print_info "Aborted. Please run this script in a different directory."
+                exit 0
+            fi
+        fi
+    fi
+    
     if [ ! -d "paranext-core" ]; then
         print_info "Cloning paranext-core repository..."
         git clone https://github.com/paranext/paranext-core.git --quiet
         print_success "paranext-core cloned!"
+    else
+        print_info "paranext-core already exists, will update it..."
     fi
     
     cd paranext-core
+    
+    # Fetch latest changes
+    print_info "Fetching latest changes..."
+    git fetch --tags --quiet
     
     # Check current version and switch if needed
     current_tag=$(git describe --exact-match --tags 2>/dev/null || echo "")
     current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
     
-    if [ "$current_tag" != "v0.4.0" ] && [ "$current_branch" != "v0.4.0" ]; then
-        print_info "Switching to v0.4.0..."
-        git fetch --tags --quiet
-        git checkout v0.4.0 --quiet
-        print_success "Switched to v0.4.0!"
+    if [ "$current_tag" != "$target_version" ] && [ "$current_branch" != "$target_version" ]; then
+        print_info "Switching to $target_version..."
+        git checkout "$target_version" --quiet 2>/dev/null || {
+            print_error "Version $target_version not found. Available versions:"
+            git tag -l "v*" | sort -V | tail -n 10
+            exit 1
+        }
+        print_success "Switched to $target_version!"
     else
-        print_success "Already on v0.4.0!"
+        print_success "Already on $target_version!"
     fi
     
     # Install dependencies if node_modules doesn't exist or is outdated
@@ -156,12 +215,48 @@ setup_paranext_core() {
     fi
     
     cd "$WORKSPACE_DIR"
-    print_success "Platform.Bible core (v0.4.0) ready!"
+    print_success "Platform.Bible core ($target_version) ready!"
 }
 
 # Function to prompt for user input
 get_user_input() {
     print_info "Please provide the following information:"
+    echo
+    
+    # Ask about extension template type
+    if [ -z "$EXTENSION_TEMPLATE_TYPE" ] || [ "$EXTENSION_TEMPLATE_TYPE" = "basic" ]; then
+        echo "Extension Template Type:"
+        echo "  1. Basic Extension (single extension)"
+        echo "  2. Multi Extension (multiple related extensions in one repo)"
+        echo
+        read -p "Select template type (1 or 2, default: 1): " template_choice
+        echo
+        
+        case $template_choice in
+            2)
+                EXTENSION_TEMPLATE_TYPE="multi"
+                print_info "Using multi-extension template"
+                ;;
+            *)
+                EXTENSION_TEMPLATE_TYPE="basic"
+                print_info "Using basic extension template"
+                ;;
+        esac
+    fi
+    
+    # Get paranext-core version preference
+    if [ "$PARANEXT_VERSION" = "latest" ]; then
+        echo
+        read -p "Use latest stable Platform.Bible release? (Y/n): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Nn]$ ]]; then
+            read -p "Enter specific version (e.g., v0.4.0): " PARANEXT_VERSION
+        else
+            PARANEXT_VERSION=$(get_latest_paranext_version)
+        fi
+    fi
+    
+    print_info "Will target Platform.Bible version: $PARANEXT_VERSION"
     echo
     
     # Get extension name
@@ -235,18 +330,29 @@ setup_template() {
         fi
     fi
     
+    # Determine template repository based on type
+    local template_repo
+    if [ "$EXTENSION_TEMPLATE_TYPE" = "multi" ]; then
+        template_repo="https://github.com/paranext/paranext-multi-extension-template.git"
+        print_info "Cloning multi-extension template..."
+    else
+        template_repo="https://github.com/paranext/paranext-extension-template.git"
+        print_info "Cloning basic extension template..."
+    fi
+    
     # Clone the template
-    print_info "Cloning extension template..."
-    git clone https://github.com/paranext/paranext-extension-template.git "$KEBAB_NAME" --quiet
+    git clone "$template_repo" "$KEBAB_NAME" --quiet
     
     cd "$KEBAB_NAME"
     
-    # Remove git history and reinitialize
-    print_info "Initializing new git repository..."
-    rm -rf .git
-    git init --quiet
+    # Set up template as remote for future updates (recommended practice)
+    print_info "Setting up template remote for future updates..."
+    git remote rename origin template
+    git remote add origin "YOUR_REPO_URL_HERE"  # Placeholder for user's repo
     
     print_success "Template cloned successfully!"
+    print_info "💡 Tip: You can update from the template in the future using:"
+    print_info "   git fetch template && git merge template/main --allow-unrelated-histories"
 }
 
 # Function to rename files
@@ -567,14 +673,19 @@ create_git_commit() {
     git add .
     git commit -m "Initial commit: Created $EXTENSION_NAME extension from template
 
-Target Platform.Bible version: v0.4.0
-Extension Template: paranext-extension-template
+Target Platform.Bible version: $PARANEXT_VERSION
+Extension Template: $EXTENSION_TEMPLATE_TYPE
 Created: $(date)
-Kebab case: $KEBAB_CASE
-Camel case: $CAMEL_CASE
-Pascal case: $PASCAL_CASE" --quiet
+Kebab case: $KEBAB_NAME
+Camel case: $CAMEL_NAME
+Pascal case: $PASCAL_NAME
+
+Template remote configured for future updates.
+To update from template: git fetch template && git merge template/main" --quiet
     
     print_success "Initial commit created with version info!"
+    print_info "💡 Remember to set your repository URL:"
+    print_info "   git remote set-url origin YOUR_REPO_URL"
 }
 
 # Function to test the build
@@ -599,13 +710,15 @@ show_completion() {
     echo "  📁 Directory: $KEBAB_NAME"
     echo "  👤 Author: $AUTHOR_NAME"
     echo "  📄 Description: $DESCRIPTION"
-    echo "  🎯 Target Version: Platform.Bible v0.4.0"
+    echo "  🎯 Target Version: Platform.Bible $PARANEXT_VERSION"
+    echo "  📦 Template Type: $EXTENSION_TEMPLATE_TYPE"
     echo
     echo -e "${BLUE}Next steps:${NC}"
     echo "  1. cd $KEBAB_NAME"
-    echo "  2. npm run build             # Build the extension (creates dist directory)"
-    echo "  3. npm run watch             # Start development mode"
-    echo "  4. cd ../paranext-core && npm start  # Test in Platform.Bible"
+    echo "  2. Update the git remote 'origin' to point to your repository"
+    echo "  3. npm run build             # Build the extension (creates dist directory)"
+    echo "  4. npm run watch             # Start development mode"
+    echo "  5. cd ../paranext-core && npm start  # Test in Platform.Bible"
     echo
     echo -e "${BLUE}Development commands:${NC}"
     echo "  📦 npm run build          # Build for development"
@@ -615,15 +728,23 @@ show_completion() {
     echo "  ✨ npm run format         # Format code"
     echo "  📋 npm run package        # Create distributable package"
     echo
+    if [ "$EXTENSION_TEMPLATE_TYPE" = "multi" ]; then
+        echo -e "${YELLOW}Note: This is a multi-extension repository.${NC}"
+        echo -e "${YELLOW}To create additional extensions, see the multi-extension template docs.${NC}"
+        echo
+    fi
     echo -e "${GREEN}✅ Extension symlinked to paranext-core/extensions/dist/${NC}"
     echo -e "${BLUE}Your extension will appear in Platform.Bible after building!${NC}"
+    echo
+    echo -e "${YELLOW}💡 To update from the template later:${NC}"
+    echo -e "${YELLOW}   git fetch template && git merge template/main --allow-unrelated-histories${NC}"
     echo
     print_info "Happy coding! 🚀"
 }
 
 # Function to show help
 show_help() {
-    echo "Paranext Extension Creator Script"
+    echo "Paranext Extension Creator Script v2.0"
     echo
     echo "Usage: $0 [OPTIONS]"
     echo
@@ -634,6 +755,8 @@ show_help() {
     echo "  -p, --publisher PUB     Publisher name"
     echo "  -d, --description DESC  Extension description"
     echo "  -w, --workspace DIR     Workspace directory (default: current)"
+    echo "  -v, --version VERSION   Platform.Bible version (default: latest stable)"
+    echo "  -t, --template TYPE     Template type: 'basic' or 'multi' (default: basic)"
     echo "  --skip-deps             Skip dependency installation"
     echo "  --skip-git              Skip git initialization"
     echo "  --skip-test             Skip build test"
@@ -641,7 +764,15 @@ show_help() {
     echo "Examples:"
     echo "  $0                                          # Interactive mode"
     echo "  $0 -n \"My Extension\" -a \"John Doe\"        # Semi-automated"
-    echo "  $0 --name \"Bible Helper\" --skip-deps      # Skip dependency install"
+    echo "  $0 --name \"Bible Helper\" --version v0.5.0  # Specific version"
+    echo "  $0 -n \"Tools\" -t multi                     # Multi-extension template"
+    echo
+    echo "Features:"
+    echo "  • Automatically detects and uses latest stable Platform.Bible release"
+    echo "  • Warns if existing extensions will be affected by paranext-core update"
+    echo "  • Handles existing paranext-core (update vs fresh clone)"
+    echo "  • Supports both basic and multi-extension templates"
+    echo "  • Sets up template remote for future updates (recommended practice)"
 }
 
 # Parse command line arguments
@@ -676,6 +807,14 @@ while [[ $# -gt 0 ]]; do
             WORKSPACE_DIR="$2"
             shift 2
             ;;
+        -v|--version)
+            PARANEXT_VERSION="$2"
+            shift 2
+            ;;
+        -t|--template)
+            EXTENSION_TEMPLATE_TYPE="$2"
+            shift 2
+            ;;
         --skip-deps)
             SKIP_DEPS=true
             shift
@@ -703,9 +842,6 @@ main() {
     # Check prerequisites
     check_prerequisites
     
-    # Setup paranext-core with correct version
-    setup_paranext_core
-    
     # Get user input (skip if provided via command line)
     if [ -z "$EXTENSION_NAME" ]; then
         get_user_input
@@ -720,7 +856,15 @@ main() {
         [ -z "$PUBLISHER_NAME" ] && PUBLISHER_NAME="yourPublisher"
         [ -z "$DESCRIPTION" ] && DESCRIPTION="A Platform.Bible extension"
         [ -z "$WORKSPACE_DIR" ] && WORKSPACE_DIR="."
+        
+        # Get latest version if not specified
+        if [ "$PARANEXT_VERSION" = "latest" ]; then
+            PARANEXT_VERSION=$(get_latest_paranext_version)
+        fi
     fi
+    
+    # Setup paranext-core with target version
+    setup_paranext_core "$PARANEXT_VERSION"
     
     # Execute setup steps
     setup_template

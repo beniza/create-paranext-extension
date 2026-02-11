@@ -1,6 +1,26 @@
 # Creating a New Paranext Extension: Complete Setup Prompt
 
-*Use this prompt as a template when you want to create a new Paranext extension. Fill in the placeholders with your specific project details.*
+> **⚡ Quick Start:** Use the automated [create-paranext-extension.sh](../create-paranext-extension.sh) script instead of following these manual steps! The script handles all of this automatically with the latest best practices.
+> 
+> ```bash
+> ./create-paranext-extension.sh
+> ```
+>
+> This document is kept for reference and for those who want to understand the manual process.
+
+---
+
+*Use this prompt as a template when you want to create a new Paranext extension manually. Fill in the placeholders with your specific project details.*
+
+## Important Updates (v2.0)
+
+**Latest Stable Release:** Platform.Bible v0.5.0 (as of Oct 2025)
+
+**Template Options:**
+- **Basic Extension**: https://github.com/paranext/paranext-extension-template.git (for single extensions)
+- **Multi Extension**: https://github.com/paranext/paranext-multi-extension-template.git (for multiple related extensions)
+
+**Git Workflow Change:** The Paranext team recommends keeping the git history and setting up the template as a remote for easy future updates, rather than deleting `.git` and reinitializing.
 
 ## Project Setup Prompt Template
 
@@ -18,12 +38,13 @@
 
 ### 2. Prerequisites Checklist
 Before starting, ensure you have:
-- [ ] **Volta** installed (recommended) or **Node.js 22.16.0+**
+- [ ] **Volta** installed (recommended) or **Node.js 18+** (22.15.1+ recommended)
 - [ ] **Git** installed and configured
+- [ ] **curl** (for API calls in automated script)
 - [ ] **VS Code** (recommended) with suggested extensions
 - [ ] **.NET 8 SDK** (for Platform.Bible core)
 - [ ] **Platform.Bible core** cloned and working in `./paranext-core/` (same directory)
-- [ ] **Target Version:** v0.4.0 (latest stable release) - not `main` branch
+- [ ] **Target Version:** Latest stable release (v0.5.0 as of Oct 2025) - check https://github.com/paranext/paranext-core/releases/latest
 
 ### 3. Extension Creation Commands
 
@@ -37,8 +58,9 @@ cd ~/Documents/dev/ptx  # or your preferred location
 git clone https://github.com/paranext/paranext-core.git
 cd paranext-core
 
-# Checkout the specific version you want to target (v0.4.0 recommended)
-git checkout v0.4.0
+# Checkout the specific version you want to target (latest stable recommended)
+# Get latest version from: https://github.com/paranext/paranext-core/releases/latest
+git checkout v0.5.0  # or the latest stable version
 
 # Install dependencies for Platform.Bible core
 npm install
@@ -47,8 +69,11 @@ npm run build
 # Navigate back to workspace for extension development
 cd ..
 
-# Clone the extension template
+# Clone the extension template (choose basic or multi)
+# For a single extension:
 git clone https://github.com/paranext/paranext-extension-template.git [your-extension-name]
+# OR for multiple related extensions:
+# git clone https://github.com/paranext/paranext-multi-extension-template.git [your-extension-name]
 
 # Enter the new project directory
 cd [your-extension-name]
@@ -56,11 +81,14 @@ cd [your-extension-name]
 # Install dependencies
 npm install
 
-# Remove the git history to start fresh
-rm -rf .git
-git init
+# Set up template remote for future updates (RECOMMENDED by Paranext team)
+# This allows you to merge future template improvements
+git remote rename origin template
+git remote add origin [your-repo-url]
+
+# Create initial commit
 git add .
-git commit -m "Initial commit from paranext-extension-template for Platform.Bible v0.4.0"
+git commit -m "Initial commit from paranext-extension-template for Platform.Bible v0.5.0"
 ```
 
 ### 4. File Renaming and Updates
