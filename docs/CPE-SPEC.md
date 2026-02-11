@@ -43,7 +43,6 @@ Automate the complete setup of a Platform.Bible extension development environmen
 - Configure development environment
 - Initialize git repository with proper remotes
 - Install dependencies and verify build
-- Create symlinks for Platform.Bible integration
 
 ---
 
@@ -206,9 +205,9 @@ cli_arguments:
       validation: must_exist_or_creatable
       guidance: |
         The directory where your extension and paranext-core will be located.
-        Both the extension and paranext-core should be in the same parent directory
-        for proper symlink integration. Use current directory (.) if you're already
-        in your workspace, or specify an absolute/relative path.
+        Both the extension and paranext-core should be in the same parent directory.
+        Use current directory (.) if you're already in your workspace, or specify
+        an absolute/relative path.
     
     - name: version
       short: -v
@@ -399,12 +398,6 @@ workflow:
         - update_types_file
         - update_readme
         - update_display_data
-    
-    - id: integration
-      name: Integrate with Platform.Bible
-      operations:
-        - create_extension_symlink
-      error_recovery: warn_but_continue
     
     - id: dependencies
       name: Install Dependencies
@@ -851,14 +844,6 @@ recovery_strategies:
       options:
         - remove_and_continue
         - abort_operation
-  
-  - condition: symlink_permission_denied
-    strategy: provide_manual_instructions
-    details:
-      message: |
-        Run these commands manually:
-        cd paranext-core/extensions/dist
-        ln -s ../../../{extension_name}/dist {extension_name}
 ```
 
 ---
@@ -962,12 +947,6 @@ file_system_output:
           tsconfig.json: TypeScript configuration
           tailwind.config.ts: Tailwind CSS configuration
           webpack.config.ts: Webpack configuration
-  
-  symlinks:
-    - source: workspace_dir/{extension-name}/dist
-      target: workspace_dir/paranext-core/extensions/dist/{extension-name}
-      type: symbolic_link
-      note: Created after first build
 ```
 
 ---

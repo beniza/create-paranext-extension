@@ -620,52 +620,6 @@ EOF
     print_success "Updated main.ts with welcome webview"
 }
 
-# Function to create symlink in paranext-core extensions
-create_extension_symlink() {
-    print_info "Setting up extension symlink in paranext-core..."
-    
-    local extension_dist_path="$WORKSPACE_DIR/$KEBAB_NAME/dist"
-    local paranext_extensions_path="$WORKSPACE_DIR/paranext-core/extensions/dist"
-    
-    # Check if paranext-core/extensions/dist directory exists
-    if [ ! -d "$paranext_extensions_path" ]; then
-        print_error "paranext-core/extensions/dist directory not found!"
-        print_info "Make sure paranext-core is properly set up and built."
-        return 1
-    fi
-    
-    # Check if extension dist directory exists (will be created after build)
-    if [ ! -d "$extension_dist_path" ]; then
-        print_warning "Extension dist directory not found yet."
-        print_info "The symlink will point to: $extension_dist_path"
-        print_info "Make sure to build your extension with 'npm run build' first."
-    fi
-    
-    # Create symlink in paranext-core/extensions/dist
-    local symlink_path="$paranext_extensions_path/$KEBAB_NAME"
-    
-    # Remove existing symlink if it exists
-    if [ -L "$symlink_path" ]; then
-        rm "$symlink_path"
-        print_info "Removed existing symlink"
-    elif [ -e "$symlink_path" ]; then
-        print_error "A file or directory already exists at $symlink_path"
-        print_info "Please remove it manually and try again."
-        return 1
-    fi
-    
-    # Create the symlink
-    ln -s "$extension_dist_path" "$symlink_path"
-    
-    if [ $? -eq 0 ]; then
-        print_success "Created symlink: $symlink_path -> $extension_dist_path"
-        print_info "Your extension will be available in Platform.Bible after building!"
-    else
-        print_error "Failed to create symlink"
-        return 1
-    fi
-}
-
 # Function to install dependencies
 install_dependencies() {
     print_info "Installing dependencies..."
@@ -748,8 +702,6 @@ show_completion() {
         echo -e "${YELLOW}To create additional extensions, see the multi-extension template docs.${NC}"
         echo
     fi
-    echo -e "${GREEN}✅ Extension symlinked to paranext-core/extensions/dist/${NC}"
-    echo -e "${BLUE}Your extension will appear in Platform.Bible after building!${NC}"
     echo
     echo -e "${YELLOW}💡 To update from the template later:${NC}"
     echo -e "${YELLOW}   git fetch template && git merge template/main --allow-unrelated-histories${NC}"
@@ -886,7 +838,6 @@ main() {
     rename_files
     update_files
     create_welcome_webview
-    create_extension_symlink
     
     if [ "$SKIP_DEPS" = false ]; then
         install_dependencies

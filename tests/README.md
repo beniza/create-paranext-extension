@@ -46,10 +46,10 @@ This test suite validates all aspects of CPE functionality including:
 tests/
 ├── test-runner.sh           # Main test orchestration script
 ├── test-helpers.sh          # Common utilities and helpers
-├── test-unit.sh             # Unit tests (27 tests)
+├── test-unit.sh             # Unit tests (25 tests)
 ├── test-integration.sh      # Integration tests (11 tests)
-├── test-error-handling.sh   # Error handling tests (28 tests)
-├── test-validation.sh       # Validation tests (33 tests)
+├── test-error-handling.sh   # Error handling tests (25 tests)
+├── test-validation.sh       # Validation tests (31 tests)
 └── README.md                # This file
 ```
 
@@ -64,9 +64,8 @@ Tests individual functions in isolation:
 - **Extension Detection** (4 tests): Detecting existing extensions in workspace
 - **Directory Validation** (3 tests): Path validation, directory creation
 - **File Operations** (3 tests): File replacement, content updates
-- **Symlink Creation** (2 tests): Symbolic link operations
 - **Configuration Validation** (4 tests): Config file parsing and validation
-- **Template Selection** (3 tests): Template type detection and application
+- **Template Selection** (2 tests): Template type detection and application
 
 ### Integration Tests (test-integration.sh)
 
@@ -87,7 +86,6 @@ Tests error scenarios and recovery:
 - **Directory Conflicts** (3 tests): Existing directories, version conflicts, permissions
 - **Network Errors** (3 tests): API timeouts, clone failures, invalid URLs
 - **Build Errors** (3 tests): npm install/build failures, compilation errors
-- **Symlink Errors** (3 tests): Permission denied, missing targets, existing links
 - **File Update Errors** (2 tests): Read-only files, corrupted JSON
 - **Warnings** (3 tests): Existing extensions, old versions, beta versions
 - **Recovery** (2 tests): Cleanup on error, partial setup detection

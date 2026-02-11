@@ -175,7 +175,7 @@ See [Changelog](docs/CHANGELOG.md) for complete history.
 
 ## � Testing
 
-The project includes a comprehensive test suite with 99 tests:
+The project includes a comprehensive test suite with 92 tests:
 
 ```bash
 # Run all tests

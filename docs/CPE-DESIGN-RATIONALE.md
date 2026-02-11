@@ -47,7 +47,6 @@ Several areas require particular care:
 - Selecting and targeting the appropriate version
 - Converting names correctly to different case formats across all files
 - Setting up git remotes properly
-- Creating symlinks that work across platforms
 
 **Details to Track:**
 The process involves remembering many specifics simultaneously—exact file paths, naming conventions, which files have been updated, and the sequence of steps. This can be particularly challenging when first learning the Platform.Bible ecosystem.
@@ -135,8 +134,7 @@ Below are the 30 manual steps required to set up a Platform.Bible extension deve
 |---|-------------|------------|---------------|
 | 27 | Install extension dependencies (npm install) | Medium | Occasional dependency considerations |
 | 28 | Build extension (npm run build) | High | Validates all previous steps |
-| 29 | Create symlink in paranext-core/extensions/dist | High | Platform-specific, permission-sensitive |
-| 30 | Test setup (npm start from paranext-core) | Medium | Final validation of complete setup |
+| 29 | Test setup with npm start | Medium | Final validation of complete setup |
 
 **Typical Duration:** 10-15 minutes plus build time
 
@@ -234,8 +232,7 @@ PascalCase: "ScriptureReferenceHelper" (all words capitalized)
 |------|--------------|---------|-------------|
 | 27 | **Dependency Installation**: Runs npm install with error handling | Monitored | ✅ Clear error feedback |
 | 28 | **Build Verification**: Runs build to verify setup correctness | Validated | ✅ Confirms successful setup |
-| 29 | **Symlink Creator**: Creates symlink with proper error handling and platform awareness | Platform-aware | ✅ Handles OS differences |
-| 30 | **Success Verification**: Confirms all steps completed successfully | Complete | ✅ Provides next steps |
+| 29 | **Success Verification**: Confirms all steps completed successfully | Complete | ✅ Provides next steps |
 
 **CPE Contribution:** Validated integration with clear success confirmation
 
@@ -349,7 +346,7 @@ error_handling:
 **Examples:**
 - "Version v0.6.0 not found. Available versions: v0.5.0, v0.4.0, v0.3.0"
 - "Build issues detected. Please verify Node.js version is 18+"
-- "Symlink creation requires manual steps—here's how: ln -s ..."
+- "Extension setup complete! Run 'npm start' to launch Platform.Bible"
 
 **Value:** Clear, actionable guidance when challenges arise.
 

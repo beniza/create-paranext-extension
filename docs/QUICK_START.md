@@ -50,14 +50,14 @@ Answer the prompts:
 The project includes a comprehensive test suite:
 
 ```bash
-# Run all tests (99 tests)
+# Run all tests (92 tests)
 ./tests/test-runner.sh
 
 # Run specific test category
-./tests/test-runner.sh --suite unit           # 27 tests
+./tests/test-runner.sh --suite unit           # 25 tests
 ./tests/test-runner.sh --suite integration   # 11 tests
-./tests/test-runner.sh --suite error-handling # 28 tests
-./tests/test-runner.sh --suite validation    # 33 tests
+./tests/test-runner.sh --suite error-handling # 25 tests
+./tests/test-runner.sh --suite validation    # 31 tests
 ```
 
 See [tests/README.md](../tests/README.md) for detailed test documentation.
@@ -145,8 +145,7 @@ npm run build
 1. 💡 Use `npm run watch` for live reload during development
 2. 💡 The template remote is your friend - merge updates regularly  
 3. 💡 Target latest version unless you have a specific reason not to
-4. 💡 Check the symlink was created: `ls -la paranext-core/extensions/dist/`
-5. 💡 If you update paranext-core, rebuild your extension
+4. 💡 If you update paranext-core, rebuild your extension
 
 ## Need More Help?
 
