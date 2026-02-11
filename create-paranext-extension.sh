@@ -7,20 +7,37 @@
 
 set -e  # Exit on any error
 
+# Script version
+SCRIPT_VERSION="2.0"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Default paranext-core version (can be overridden)
 PARANEXT_VERSION="latest"
 EXTENSION_TEMPLATE_TYPE="basic"  # basic or multi
+VERBOSE=false
 
 # Print colored output
 print_info() {
     echo -e "${BLUE}ℹ️  $1${NC}" >&2
+}
+
+print_debug() {
+    if [ "$VERBOSE" = true ]; then
+        echo -e "${CYAN}🔍 DEBUG: $1${NC}" >&2
+    fi
+}
+
+print_verbose() {
+    if [ "$VERBOSE" = true ]; then
+        echo -e "${CYAN}📋 $1${NC}" >&2
+    fi
 }
 
 print_success() {
@@ -45,25 +62,33 @@ print_header() {
 
 # Function to convert string to different cases
 to_kebab_case() {
-    echo "$1" | sed 's/[^a-zA-Z0-9]/-/g' | sed 's/--*/-/g' | tr '[:upper:]' '[:lower:]' | sed 's/^-\|-$//g'
+    local result=$(echo "$1" | sed 's/[^a-zA-Z0-9]/-/g' | sed 's/--*/-/g' | tr '[:upper:]' '[:lower:]' | sed 's/^-\|-$//g')
+    print_debug "to_kebab_case('$1') -> '$result'"
+    echo "$result"
 }
 
 to_camel_case() {
     local kebab="$1"
-    echo "$kebab" | sed 's/-\([a-z]\)/\U\1/g'
+    local result=$(echo "$kebab" | sed 's/-\([a-z]\)/\U\1/g')
+    print_debug "to_camel_case('$kebab') -> '$result'"
+    echo "$result"
 }
 
 to_pascal_case() {
     local camel="$1"
-    echo "${camel^}"  # Capitalize first letter
+    local result="${camel^}"
+    print_debug "to_pascal_case('$camel') -> '$result'"
+    echo "$result"
 }
 
 # Function to get latest stable release version from GitHub
 get_latest_paranext_version() {
     print_info "Fetching latest Platform.Bible release version..."
+    print_debug "Calling GitHub API: https://api.github.com/repos/paranext/paranext-core/releases/latest"
     
     # Try to get the latest release version from GitHub API
     local latest_version=$(curl -s "https://api.github.com/repos/paranext/paranext-core/releases/latest" | grep '"tag_name"' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/')
+    print_debug "API returned version: '$latest_version'"
     
     if [ -z "$latest_version" ]; then
         print_warning "Could not fetch latest version. Using v0.5.0 as fallback."
@@ -99,31 +124,48 @@ check_existing_extensions() {
 # Function to validate prerequisites
 check_prerequisites() {
     print_info "Checking prerequisites..."
+    print_verbose "Checking system for required dependencies..."
     
     local missing_deps=()
     
     # Check for curl (needed for API calls)
+    print_debug "Checking for curl..."
     if ! command -v curl &> /dev/null; then
         missing_deps+=("curl")
+        print_debug "curl: NOT FOUND"
+    else
+        print_debug "curl: $(command -v curl)"
     fi
     
     # Check for git
+    print_debug "Checking for git..."
     if ! command -v git &> /dev/null; then
         missing_deps+=("git")
+        print_debug "git: NOT FOUND"
+    else
+        print_debug "git: $(command -v git) (version: $(git --version | cut -d' ' -f3))"
     fi
     
     # Check for npm
+    print_debug "Checking for npm..."
     if ! command -v npm &> /dev/null; then
         missing_deps+=("npm")
+        print_debug "npm: NOT FOUND"
+    else
+        print_debug "npm: $(command -v npm) (version: $(npm --version))"
     fi
     
     # Check for node
+    print_debug "Checking for node..."
     if ! command -v node &> /dev/null; then
         missing_deps+=("node")
+        print_debug "node: NOT FOUND"
     else
         # Check Node.js version
         local node_version=$(node --version | sed 's/v//')
         local major_version=$(echo $node_version | cut -d. -f1)
+        print_success "Node version: v$node_version"
+        print_debug "node: $(command -v node) (version: v$node_version)"
         if [ "$major_version" -lt 18 ]; then
             print_warning "Node.js version $node_version detected. Version 18+ recommended."
         fi
@@ -142,10 +184,13 @@ check_prerequisites() {
 setup_paranext_core() {
     local target_version="$1"
     print_info "Setting up Platform.Bible core ($target_version)..."
+    print_debug "Target version: $target_version"
     
     # Convert WORKSPACE_DIR to absolute path to avoid confusion
     WORKSPACE_DIR=$(realpath "$WORKSPACE_DIR")
+    print_debug "Workspace directory (absolute): $WORKSPACE_DIR"
     cd "$WORKSPACE_DIR"
+    print_verbose "Changed to workspace directory: $(pwd)"
     
     # Check for existing extensions before updating paranext-core
     if [ -d "paranext-core" ]; then
@@ -325,11 +370,14 @@ get_user_input() {
 # Function to clone and setup the template
 setup_template() {
     print_info "Setting up extension template..."
+    print_verbose "Initializing template setup process..."
     
     # Ensure we're in the workspace directory, not inside paranext-core
     # Convert to absolute path to avoid any confusion
     WORKSPACE_DIR=$(realpath "$WORKSPACE_DIR")
+    print_debug "Absolute workspace path: $WORKSPACE_DIR"
     cd "$WORKSPACE_DIR"
+    print_debug "Current directory: $(pwd)"
     
     # Check if directory already exists
     if [ -d "$KEBAB_NAME" ]; then
@@ -350,19 +398,25 @@ setup_template() {
     if [ "$EXTENSION_TEMPLATE_TYPE" = "multi" ]; then
         template_repo="https://github.com/paranext/paranext-multi-extension-template.git"
         print_info "Cloning multi-extension template..."
+        print_debug "Using multi-extension template repository"
     else
         template_repo="https://github.com/paranext/paranext-extension-template.git"
         print_info "Cloning basic extension template..."
+        print_debug "Using basic extension template repository"
     fi
     
     # Clone the template
+    print_debug "Executing: git clone $template_repo $KEBAB_NAME"
     git clone "$template_repo" "$KEBAB_NAME" --quiet
     
     cd "$KEBAB_NAME"
+    print_debug "Changed to extension directory: $(pwd)"
     
     # Set up template as remote for future updates (recommended practice)
     print_info "Setting up template remote for future updates..."
+    print_debug "Executing: git remote rename origin template"
     git remote rename origin template
+    print_debug "Executing: git remote add origin YOUR_REPO_URL_HERE"
     git remote add origin "YOUR_REPO_URL_HERE"  # Placeholder for user's repo
     
     print_success "Template cloned successfully!"
@@ -373,20 +427,26 @@ setup_template() {
 # Function to rename files
 rename_files() {
     print_info "Renaming template files..."
+    print_verbose "Processing file renames for template customization..."
     
     # Rename the types file
     if [ -f "src/types/paranext-extension-template.d.ts" ]; then
+        print_debug "Executing: mv src/types/paranext-extension-template.d.ts src/types/$KEBAB_NAME.d.ts"
         mv "src/types/paranext-extension-template.d.ts" "src/types/$KEBAB_NAME.d.ts"
         print_success "Renamed types file to $KEBAB_NAME.d.ts"
+    else
+        print_debug "Types file not found: src/types/paranext-extension-template.d.ts"
     fi
 }
 
 # Function to update file contents
 update_files() {
     print_info "Updating file contents..."
+    print_verbose "Replacing template placeholders with extension details..."
     
     # Update package.json
     if [ -f "package.json" ]; then
+        print_debug "Updating package.json with extension details"
         # Use a more robust sed approach with temp file
         sed -e "s/\"name\": \"paranext-extension-template\"/\"name\": \"$KEBAB_NAME\"/" \
             -e "s/\"types\": \"src\/types\/paranext-extension-template\.d\.ts\"/\"types\": \"src\/types\/$KEBAB_NAME.d.ts\"/" \
@@ -398,6 +458,7 @@ update_files() {
     
     # Update manifest.json
     if [ -f "manifest.json" ]; then
+        print_debug "Updating manifest.json with extension metadata"
         sed -e "s/\"name\": \"paranextExtensionTemplate\"/\"name\": \"$CAMEL_NAME\"/" \
             -e "s/\"publisher\": \"paranext\"/\"publisher\": \"$PUBLISHER_NAME\"/" \
             -e "s/\"author\": \"Paranext\"/\"author\": \"$AUTHOR_NAME\"/" \
@@ -491,8 +552,10 @@ EOF
 # Function to create welcome webview
 create_welcome_webview() {
     print_info "Creating welcome webview..."
+    print_verbose "Generating welcome webview component with Platform.Bible React components..."
     
     # Create web-views directory
+    print_debug "Creating directory: src/web-views"
     mkdir -p "src/web-views"
     
     # Create welcome webview component
@@ -623,13 +686,16 @@ EOF
 # Function to install dependencies
 install_dependencies() {
     print_info "Installing dependencies..."
+    print_verbose "Running npm install to fetch project dependencies..."
     
     # Remove package-lock.json to regenerate with new name
     if [ -f "package-lock.json" ]; then
+        print_debug "Removing old package-lock.json"
         rm package-lock.json
     fi
     
     # Install dependencies
+    print_debug "Executing: npm install"
     npm install --silent
     
     print_success "Dependencies installed successfully!"
@@ -656,8 +722,11 @@ install_dependencies() {
 # Function to create initial git commit
 create_git_commit() {
     print_info "Creating initial git commit..."
+    print_verbose "Staging all files and creating commit with extension metadata..."
     
+    print_debug "Executing: git add ."
     git add .
+    print_debug "Creating commit with extension details"
     git commit -m "Initial commit: Created $EXTENSION_NAME extension from template
 
 Target Platform.Bible version: $PARANEXT_VERSION
@@ -678,11 +747,15 @@ To update from template: git fetch template && git merge template/main" --quiet
 # Function to test the build
 test_build() {
     print_info "Testing extension build..."
+    print_verbose "Running build test to verify extension structure..."
     
+    print_debug "Executing: npm run build"
     if npm run build --silent; then
         print_success "Extension builds successfully!"
+        print_debug "Build completed without errors"
     else
         print_error "Build failed! Please check the output above."
+        print_debug "Build command returned non-zero exit code"
         return 1
     fi
 }
@@ -745,12 +818,14 @@ show_help() {
     echo "  --skip-deps             Skip dependency installation"
     echo "  --skip-git              Skip git initialization"
     echo "  --skip-test             Skip build test"
+    echo "  --verbose               Enable verbose/debug output"
     echo
     echo "Examples:"
     echo "  $0                                          # Interactive mode"
     echo "  $0 -n \"My Extension\" -a \"John Doe\"        # Semi-automated"
     echo "  $0 --name \"Bible Helper\" --version v0.5.0  # Specific version"
     echo "  $0 -n \"Tools\" -t multi                     # Multi-extension template"
+    echo "  $0 --verbose -n \"Debug Extension\"          # With verbose output"
     echo
     echo "Features:"
     echo "  • Automatically detects and uses latest stable Platform.Bible release"
@@ -812,6 +887,11 @@ while [[ $# -gt 0 ]]; do
             SKIP_TEST=true
             shift
             ;;
+        --verbose)
+            VERBOSE=true
+            print_debug "Verbose mode enabled"
+            shift
+            ;;
         *)
             print_error "Unknown option: $1"
             show_help
@@ -824,10 +904,22 @@ done
 main() {
     print_header
     
+    # Show version and configuration in verbose mode
+    print_verbose "Create Paranext Extension Script v$SCRIPT_VERSION"
+    print_debug "Script invoked at: $(date)"
+    print_debug "Working directory: $(pwd)"
+    print_debug "User: $USER"
+    print_debug "Shell: $SHELL"
+    print_debug "Bash version: ${BASH_VERSION}"
+    
     # Determine if we're in interactive mode (no extension name provided via command line)
     INTERACTIVE_MODE=false
     if [ -z "$EXTENSION_NAME" ]; then
         INTERACTIVE_MODE=true
+        print_debug "Mode: Interactive"
+    else
+        print_debug "Mode: Command-line (non-interactive)"
+        print_debug "Extension name: $EXTENSION_NAME"
     fi
     
     # Check prerequisites
@@ -842,11 +934,26 @@ main() {
         CAMEL_NAME=$(to_camel_case "$KEBAB_NAME")
         PASCAL_NAME=$(to_pascal_case "$CAMEL_NAME")
         
+        print_debug "Generated naming variations:"
+        print_debug "  Kebab case: $KEBAB_NAME"
+        print_debug "  Camel case: $CAMEL_NAME"
+        print_debug "  Pascal case: $PASCAL_NAME"
+        
         # Set defaults for optional parameters
         [ -z "$AUTHOR_NAME" ] && AUTHOR_NAME="Your Name"
         [ -z "$PUBLISHER_NAME" ] && PUBLISHER_NAME="yourPublisher"
         [ -z "$DESCRIPTION" ] && DESCRIPTION="A Platform.Bible extension"
         [ -z "$WORKSPACE_DIR" ] && WORKSPACE_DIR="."
+        
+        print_debug "Configuration:"
+        print_debug "  Author: $AUTHOR_NAME"
+        print_debug "  Publisher: $PUBLISHER_NAME"
+        print_debug "  Description: $DESCRIPTION"
+        print_debug "  Workspace: $WORKSPACE_DIR"
+        print_debug "  Template type: $EXTENSION_TEMPLATE_TYPE"
+        print_debug "  Skip deps: $SKIP_DEPS"
+        print_debug "  Skip git: $SKIP_GIT"
+        print_debug "  Skip test: $SKIP_TEST"
         
         # Get latest version if not specified
         if [ "$PARANEXT_VERSION" = "latest" ]; then

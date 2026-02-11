@@ -101,9 +101,12 @@ The script will prompt you for all required information:
 | `-p, --publisher` | Publisher name | `--publisher "myCompany"` |
 | `-d, --description` | Extension description | `--description "Helps with Bible study"` |
 | `-w, --workspace` | Workspace directory | `--workspace ~/dev/extensions` |
+| `-v, --version` | Platform.Bible version | `--version v0.5.0` |
+| `-t, --template` | Template type: basic or multi | `--template multi` |
 | `--skip-deps` | Skip npm install | `--skip-deps` |
 | `--skip-git` | Skip git initialization | `--skip-git` |
 | `--skip-test` | Skip build test | `--skip-test` |
+| `--verbose` | Show debug output | `--verbose` |
 
 ## What the Script Does
 
@@ -270,14 +273,35 @@ This is a harmless warning about browser compatibility data. You can:
 - Update manually later: `npx update-browserslist-db@latest`
 - Ignore it - it won't affect extension functionality
 
-### Debug Mode
+### Debug/Verbose Mode
 
-For troubleshooting, you can run the script with debug output:
+For troubleshooting, use the `--verbose` flag to see detailed debug information:
 ```bash
-bash -x create-extension.sh
+./create-paranext-extension.sh --verbose -n "Debug Extension"
 ```
 
-This will show every command being executed.
+**Verbose mode shows:**
+- Script version and configuration
+- System dependency versions (node, npm, git, curl)
+- All git commands being executed (clone, checkout, commit)
+- All npm commands (install, build)
+- File operations and path resolutions
+- API calls to GitHub (for version detection)
+- Case conversion operations (kebab, camel, pascal)
+- Extension metadata being applied
+
+This is extremely helpful for:
+- 🐛 Troubleshooting script failures
+- 📊 Understanding what the script does
+- 🔍 Debugging version or path issues
+- 🏫 Learning how the automation works
+
+**Alternative:** For even more detail, you can use bash's debug mode:
+```bash
+bash -x create-paranext-extension.sh --verbose
+```
+
+This shows every shell command executed, in addition to the script's verbose output.
 
 ## Advanced Usage
 

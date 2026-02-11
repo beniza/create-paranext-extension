@@ -2,6 +2,51 @@
 
 All notable changes to the create-paranext-extension tool will be documented in this file.
 
+## [2.1.0] - TBD
+
+### Added
+
+- **Verbose/Debug Mode**: New `--verbose` flag provides detailed debug output for troubleshooting
+  - Shows script version and configuration
+  - Displays system dependency versions (node, npm, git, curl)
+  - Logs all git and npm commands being executed
+  - Tracks file operations and path resolutions
+  - Shows API calls to GitHub for version detection
+  - Helpful for debugging script failures or learning how the automation works
+- **Optional browserslist-db Update**: Interactive prompt to update browser compatibility database
+  - Only appears in interactive mode
+  - Defaults to "No" (safe to skip)
+  - Prevents confusing warning messages
+  - Can be updated manually later with: `npx update-browserslist-db@latest`
+
+### Changed
+
+- **Documentation Format**: Updated all docs to correctly state that `npm start` auto-launches Platform.Bible
+  - Removed incorrect instructions about needing to `cd ../paranext-core` and run separate commands
+  - Clarified that `npm run watch` (without `start:core`) is for scenarios where you want to run Platform.Bible separately
+- **Git Checkout Logic**: Improved version checkout with existence check and automatic stashing of local changes
+- **Output Handling**: Fixed print functions to output to stderr to prevent variable capture issues
+
+### Removed
+
+- **Symbolic Link Creation**: Removed `create_extension_symlink()` function and all symlink-related code
+  - Not needed per official paranext-extension-template documentation
+  - Official template uses `--extensions` command-line argument instead
+  - Simplified script by removing 50+ lines of code
+  - Removed 7 symlink-related tests (92 tests remain from original 99)
+
+### Fixed
+
+- **Output Capture Bug**: Print functions now output to stderr (`>&2`) to prevent garbled messages when capturing command output
+- **Git Checkout Errors**: Added version existence check before checkout and automatic stashing of local changes
+
+### Documentation
+
+- Updated `QUICK_START.md` with verbose mode usage and benefits
+- Updated `script-usage-guide.md` with comprehensive Debug/Verbose Mode section
+- Updated `CPE-SPEC.md` to remove symlink operations from specification
+- Added browserslist-db troubleshooting to `QUICK_START.md` and `script-usage-guide.md`
+
 ## [2.0.0] - 2026-02-11
 
 ### 🎉 Major Release - Complete Overhaul

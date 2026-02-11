@@ -43,7 +43,19 @@ Answer the prompts:
 
 # Fast setup (skip tests)
 ./create-paranext-extension.sh -n "Quick Test" --skip-test
+
+# Debugging with verbose output
+./create-paranext-extension.sh --verbose -n "Debug Extension"
 ```
+
+**Verbose Mode:** Use `--verbose` to see detailed debug information including:
+- Script version and configuration
+- System dependency versions (node, npm, git)
+- All git and npm commands being executed
+- File operations and path resolutions
+- API calls and responses
+
+This is helpful for troubleshooting issues or understanding what the script is doing.
 
 ## Testing the Tool
 
