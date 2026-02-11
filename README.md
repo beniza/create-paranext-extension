@@ -28,28 +28,29 @@ chmod +x create-paranext-extension.sh
 ./create-paranext-extension.sh
 ```
 
-For detailed usage instructions, see [Quick Start Guide](docs/QUICK_START.md).
+For detailed usage instructions, see [Quick Start Guide](docs/guides/QUICK_START.md).
 
 ---
 
 ## 📚 Documentation
 
 ### Getting Started
-- **[Quick Start Guide](docs/QUICK_START.md)** - TL;DR examples and common scenarios
-- **[Script Usage Guide](docs/script-usage-guide.md)** - Command-line options and detailed usage
+- **[Quick Start Guide](docs/guides/QUICK_START.md)** - TL;DR examples and common scenarios
+- **[Script Usage Guide](docs/guides/USAGE.md)** - Command-line options and detailed usage
+- **[Workspace Setup Guide](docs/guides/WORKSPACE_SETUP.md)** - Platform.Bible development environment setup
 
-### Understanding CPE
-- **[CPE Specification](docs/CPE-SPEC.md)** - Single source of truth for the tool (human and machine-readable)
-- **[Design Rationale](docs/CPE-DESIGN-RATIONALE.md)** - Why CPE exists and how it addresses the 30-step setup challenge
-- **[Changelog](docs/CHANGELOG.md)** - Version history and changes
+### Reference Documentation
+- **[CPE Specification](docs/reference/SPECIFICATION.md)** - Single source of truth for the tool (human and machine-readable)
+- **[Design Rationale](docs/reference/DESIGN_RATIONALE.md)** - Why CPE exists and how it addresses the 30-step setup challenge
+- **[Manual Extension Setup](docs/reference/MANUAL_SETUP.md)** - Step-by-step manual process (for reference)
 
 ### Testing & Quality
 - **[Test Suite](tests/README.md)** - Comprehensive test suite (92 tests covering unit, integration, error handling, and validation)
 
-### Reference Guides
-- **[Manual Extension Setup](docs/paranext-extension-creation-prompt.md)** - Step-by-step manual process (for reference)
-- **[Workspace Setup Guide](docs/workspace-setup-guide.md)** - Platform.Bible development environment setup
-- **[Update Summary](docs/UPDATE_SUMMARY.md)** - Detailed v2.0 improvements
+### Development
+- **[Changelog](docs/development/CHANGELOG.md)** - Version history and changes
+- **[Review Findings](docs/development/REVIEW_FINDINGS.md)** - Code review results and improvements
+- **[Update Summary](docs/development/UPDATE_SUMMARY.md)** - Detailed v2.0 improvements
 
 ---
 
@@ -99,7 +100,7 @@ See [Output Specification](docs/CPE-SPEC.md#output-specification) for complete d
   - Run the script in Git Bash terminal
   - Git Bash provides a Unix-like environment on Windows
 
-See [Prerequisites](docs/CPE-SPEC.md#prerequisites) for details.
+See [Prerequisites](docs/reference/SPECIFICATION.md#prerequisites) for details.
 
 ---
 
@@ -123,7 +124,7 @@ See [Prerequisites](docs/CPE-SPEC.md#prerequisites) for details.
 ./create-paranext-extension.sh --name "Test" --skip-deps --skip-test
 ```
 
-See [Usage Guide](docs/script-usage-guide.md) for all options.
+See [Usage Guide](docs/guides/USAGE.md) for all options.
 
 ---
 
@@ -134,14 +135,18 @@ create-paranext-extension/
 ├── create-paranext-extension.sh   # Main automation script
 ├── README.md                       # This file (repository overview)
 ├── docs/
-│   ├── QUICK_START.md              # Fast getting-started guide
-│   ├── CPE-SPEC.md                 # Complete specification
-│   ├── CPE-DESIGN-RATIONALE.md     # Why CPE exists
-│   ├── CHANGELOG.md                # Version history
-│   ├── UPDATE_SUMMARY.md           # v2.0 detailed changes
-│   ├── script-usage-guide.md       # Detailed usage instructions
-│   ├── workspace-setup-guide.md    # Environment setup
-│   └── paranext-extension-creation-prompt.md  # Manual process reference
+│   ├── guides/                     # User guides
+│   │   ├── QUICK_START.md          # Fast getting-started guide
+│   │   ├── USAGE.md                # Detailed script usage
+│   │   └── WORKSPACE_SETUP.md      # Environment setup
+│   ├── reference/                  # Reference documentation
+│   │   ├── SPECIFICATION.md        # Complete CPE specification
+│   │   ├── DESIGN_RATIONALE.md     # Design decisions and philosophy
+│   │   └── MANUAL_SETUP.md         # Manual process reference
+│   └── development/                # Development documentation
+│       ├── CHANGELOG.md            # Version history
+│       ├── REVIEW_FINDINGS.md      # Code review results
+│       └── UPDATE_SUMMARY.md       # Detailed v2.0 changes
 └── tests/
     ├── test-runner.sh              # Main test orchestrator (92 tests)
     ├── test-helpers.sh             # Common test utilities
@@ -161,7 +166,7 @@ create-paranext-extension/
 3. **Support Multiple Workflows** - Interactive exploration or automated CI/CD
 4. **Enable Future Implementations** - Specification supports Python, Node.js, etc.
 
-See [Design Philosophy](docs/CPE-SPEC.md#design-philosophy) for details.
+See [Design Philosophy](docs/reference/SPECIFICATION.md#design-philosophy) for details.
 
 ---
 
@@ -176,7 +181,7 @@ Major improvements in v2.0:
 - Smart paranext-core management
 - Template remote setup for updates
 
-See [Changelog](docs/CHANGELOG.md) for complete history.
+See [Changelog](docs/development/CHANGELOG.md) for complete history.
 
 ---
 
@@ -211,7 +216,7 @@ Contributions welcome! Areas of interest:
 - Additional templates and customizations
 - Test coverage improvements
 
-See [CPE Specification](docs/CPE-SPEC.md) for implementation guidance.
+See [CPE Specification](docs/reference/SPECIFICATION.md) for implementation guidance.
 
 ---
 
@@ -230,4 +235,4 @@ Follows Platform.Bible licensing.
 
 ---
 
-**Quick Links:** [Quick Start](docs/QUICK_START.md) • [Specification](docs/CPE-SPEC.md) • [Design Rationale](docs/CPE-DESIGN-RATIONALE.md) • [Changelog](docs/CHANGELOG.md)
+**Quick Links:** [Quick Start](docs/guides/QUICK_START.md) • [Specification](docs/reference/SPECIFICATION.md) • [Design Rationale](docs/reference/DESIGN_RATIONALE.md) • [Changelog](docs/development/CHANGELOG.md)
