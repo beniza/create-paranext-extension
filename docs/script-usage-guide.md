@@ -230,6 +230,19 @@ Next steps:
 
 ### Common Issues
 
+**Running on Windows**
+
+This is a bash script and requires a bash environment:
+- ✅ **Git Bash** (Recommended): Included with [Git for Windows](https://git-scm.com/downloads)
+- ✅ **WSL** (Windows Subsystem for Linux): Full Linux environment
+- ❌ **PowerShell/CMD**: Not compatible (use Git Bash instead)
+
+```bash
+# In Git Bash on Windows:
+cd /c/Users/YourName/Documents/dev/ptx-extension/create-paranext-extension
+./create-paranext-extension.sh
+```
+
 **"Command not found"**
 ```bash
 # Make sure you're running from the correct directory
@@ -255,7 +268,7 @@ chmod +x create-extension.sh
 # Install git first
 sudo apt install git  # Linux
 brew install git       # macOS
-# Download from git-scm.com for Windows
+# Windows: Download from git-scm.com (includes Git Bash)
 ```
 
 **"Node.js version too old"**

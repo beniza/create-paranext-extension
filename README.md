@@ -92,6 +92,13 @@ See [Output Specification](docs/CPE-SPEC.md#output-specification) for complete d
 
 *Falls back to v0.5.0 if curl unavailable
 
+### Platform Support
+
+- **Linux/macOS**: Native bash script execution
+- **Windows**: Requires [Git Bash](https://git-scm.com/downloads) (included with Git for Windows)
+  - Run the script in Git Bash terminal
+  - Git Bash provides a Unix-like environment on Windows
+
 See [Prerequisites](docs/CPE-SPEC.md#prerequisites) for details.
 
 ---

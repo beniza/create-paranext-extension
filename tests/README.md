@@ -234,6 +234,8 @@ run_test "My new test" test_my_new_test && ((TESTS_PASSED++)) || ((TESTS_FAILED+
 
 ### Windows
 
+- **Requires Git Bash** or WSL to run bash scripts
+- Git Bash is included with [Git for Windows](https://git-scm.com/downloads)
 - Symlink tests may require admin privileges or developer mode
 - Path handling uses forward slashes internally
 - Some permission tests are skipped
@@ -241,6 +243,7 @@ run_test "My new test" test_my_new_test && ((TESTS_PASSED++)) || ((TESTS_FAILED+
 ### Linux/macOS
 
 - All tests should run without special permissions
+- Native bash environment
 - Symlink tests run normally
 - Permission tests are more comprehensive
 

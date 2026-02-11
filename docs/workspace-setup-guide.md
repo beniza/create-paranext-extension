@@ -2,6 +2,11 @@
 
 This workspace contains tools and examples for Platform.Bible extension development, targeting **v0.4.0** (stable release).
 
+## Platform Support
+
+**Linux/macOS**: Native bash script execution  
+**Windows**: Use [Git Bash](https://git-scm.com/downloads) (included with Git for Windows)
+
 ## Quick Start
 
 ### 1. Create a New Extension

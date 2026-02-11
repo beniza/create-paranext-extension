@@ -114,10 +114,22 @@ git merge template/main --allow-unrelated-histories
 
 ## Common Issues
 
+### Running on Windows
+
+This script requires a bash environment. On Windows, use **Git Bash** (included with Git for Windows):
+
+1. Install [Git for Windows](https://git-scm.com/downloads) if not already installed
+2. Open **Git Bash** (not PowerShell or CMD)
+3. Navigate to the script directory: `cd /c/path/to/script`
+4. Run the script: `./create-paranext-extension.sh`
+
+**Note:** Git Bash provides Unix-like tools (bash, curl, etc.) and is the recommended way to run this script on Windows.
+
 ### "curl not found"
 Install curl:
 - **Ubuntu/Debian:** `sudo apt-get install curl`
 - **macOS:** `brew install curl`
+- **Windows**: Use Git Bash (curl is included)
 - **Windows/WSL:** `sudo apt-get install curl`
 
 ### "Node.js version too old"

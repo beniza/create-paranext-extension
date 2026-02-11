@@ -46,6 +46,12 @@ All notable changes to the create-paranext-extension tool will be documented in 
 - Updated `script-usage-guide.md` with comprehensive Debug/Verbose Mode section
 - Updated `CPE-SPEC.md` to remove symlink operations from specification
 - Added browserslist-db troubleshooting to `QUICK_START.md` and `script-usage-guide.md`
+- **Windows Support**: Added Git Bash requirement and usage instructions to all documentation
+  - `README.md`: Platform Support section with Git Bash requirement
+  - `QUICK_START.md`: "Running on Windows" section in Common Issues
+  - `script-usage-guide.md`: Git Bash instructions in Common Issues
+  - `workspace-setup-guide.md`: Platform Support section
+  - `tests/README.md`: Updated Platform Considerations for Windows
 
 ## [2.0.0] - 2026-02-11
 
